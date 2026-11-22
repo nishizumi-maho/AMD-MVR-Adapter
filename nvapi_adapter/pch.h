@@ -25,7 +25,12 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
+// Diagnostics build (branch diag-4th-view): detailed shader logging and disassembly dumps in Release, see diag.h.
+#define MVR_DIAG 1
+
 #include <algorithm>
+#include <atomic>
+#include <set>
 #include <cstdarg>
 #include <cstdint>
 #include <cstdio>

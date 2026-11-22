@@ -23,6 +23,7 @@
 #include "pch.h"
 
 #include "adapter.h"
+#include "diag.h"
 #include "log.h"
 
 namespace {
@@ -331,6 +332,7 @@ namespace {
                 std::lock_guard lock(state.agsDevicesMutex);
                 state.agsDevices[returnedParams.pDevice] = {context, returnedParams.extensionsSupported};
             }
+            diag::OnDeviceCreated(returnedParams.pImmediateContext);
 
             // With the debug layer, our patched shaders warn on every draw that nothing is bound to the sampler slot of
             // the AMD intrinsics (which is expected: the driver intercepts that sample). Hide the warning, since some

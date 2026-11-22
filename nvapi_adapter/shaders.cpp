@@ -93,11 +93,18 @@ namespace {
 
     // Writes the disassembly of a shader to %LOCALAPPDATA%\AMD-MVR-Adapter\shaders, in Debug builds only.
     void DumpDisassembly(const std::string& name, const void* bytecode, size_t length) {
-#ifndef _DEBUG
+#if !defined(_DEBUG) && !defined(MVR_DIAG)
         (void)name;
         (void)bytecode;
         (void)length;
 #else
+#ifdef MVR_DIAG
+        // Enough to study how the views are computed, without writing hundreds of files while the game loads.
+        static std::atomic<int> s_dumps{0};
+        if (s_dumps.fetch_add(1) >= 80) {
+            return;
+        }
+#endif
         const std::wstring dataDirectory = logging::GetDataDirectory();
         if (dataDirectory.empty()) {
             return;

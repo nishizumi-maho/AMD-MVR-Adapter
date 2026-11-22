@@ -30,7 +30,7 @@ namespace logging {
 } // namespace logging
 
 // Detailed logging (for example of every shader), in Debug builds only.
-#ifdef _DEBUG
+#if defined(_DEBUG) || defined(MVR_DIAG)
 #define LOG_DETAIL(...) logging::Log(__VA_ARGS__)
 #else
 #define LOG_DETAIL(...) ((void)0)

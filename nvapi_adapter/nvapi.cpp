@@ -23,6 +23,7 @@
 #include "pch.h"
 
 #include "adapter.h"
+#include "diag.h"
 #include "log.h"
 #include "shaders.h"
 
@@ -122,6 +123,8 @@ namespace {
                 logging::Log("Rendering views to different render target slices is not supported\n");
             }
         }
+
+        vpMask = diag::OnViewBroadcast(deviceOrContext, vpMask);
 
         // The application toggles the same states every frame: only log each one the first time.
         if (vpMask && (vpMask != state.vpMask || rtSliceMask != state.rtSliceMask)) {
@@ -340,6 +343,7 @@ NvAPI_Status __cdecl NvAPI_D3D_SetMultiViewMode(IUnknown* pDevOrContext, NV_MULT
     if (pMultiViewParams->version != NV_MULTIVIEW_PARAMS_VER1) {
         return NVAPI_INCOMPATIBLE_STRUCT_VERSION;
     }
+    diag::OnMultiViewMode(pMultiViewParams);
     // TODO: independentViewportMaskEnable is ignored: views always go to viewport 0..numViews-1.
     return SetViewBroadcast(pDevOrContext, pMultiViewParams->numViews, pMultiViewParams->renderTargetIndexOffset);
 }
